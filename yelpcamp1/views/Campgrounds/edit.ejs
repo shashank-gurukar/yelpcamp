@@ -1,0 +1,26 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
+        <!-- Note: Use POST as the method attribute -->
+
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="<%= campground.name %>">
+        <!-- Note: Removed unnecessary nested label element -->
+
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" value="<%= campground.location %>">
+        <!-- Note: Updated label text to "Location" for consistency -->
+
+        <button type="submit">Submit</button>
+        <!-- Note: Changed button type to "submit" for form submission -->
+    </form>
+
+    <a href="/campgrounds">All campgrounds</a>
+</body>
+</html>
