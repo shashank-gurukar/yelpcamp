@@ -1,8 +1,12 @@
 <% layout ('/Layout/boilerplate.ejs') %>
-<body>
+<body class="container">
     <h1>Campground show</h1>
   <h1><%= campground.title  %></h1>
   <h1><%= campground.location  %></h1>
+ 
+  <img src="<%=campground.Image%>" alt="">
+  <p><%= campground.description%></p>
+  <p><%= campground.price%></p>
   <a href="/campgrounds/<%= campground._id%>/edit">Update and edit</a>
   <a href="/campgrounds">All campgrounds</a>
   <form action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
