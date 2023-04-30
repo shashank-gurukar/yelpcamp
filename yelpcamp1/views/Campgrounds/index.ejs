@@ -1,6 +1,6 @@
 <% layout ('/Layout/boilerplate.ejs') %>
    
-    <h1>all Campgrounds</h1>
+    <h1>All Campgrounds</h1>
 <ul>
     <% for(let camp of campground){ %>
     <li><a href="campgrounds/<%=camp._id %>"><%= camp.name %></a></li>
