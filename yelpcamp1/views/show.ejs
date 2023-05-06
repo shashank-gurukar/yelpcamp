@@ -7,8 +7,11 @@
   <img src="<%=campground.Image%>" alt="">
   <p><%= campground.description%></p>
   <p><%= campground.price%></p>
-  <a href="/campgrounds/<%= campground._id%>/edit">Update and edit</a>
-  <a href="/campgrounds">All campgrounds</a>
+  <a href="/campgrounds/<%= campground._id%>/edit"><button class="btn btn-primary mb-3"> Update and edit</button></a>
+ 
+ 
+  <a href="/campgrounds"><button class="btn btn-primary mb-3">All campgrounds</button></a>
   <form action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
     <button>delete</button>
   </form>
+</body>

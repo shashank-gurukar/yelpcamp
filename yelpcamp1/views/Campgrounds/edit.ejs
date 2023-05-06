@@ -1,10 +1,4 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<% layout ('/Layout/boilerplate.ejs') %>
 <body>
     <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
         <!-- Note: Use POST as the method attribute -->
@@ -21,6 +15,7 @@
         <!-- Note: Changed button type to "submit" for form submission -->
     </form>
 
-    <a href="/campgrounds">All campgrounds</a>
+    <a href="/campgrounds"></a><button class="btn btn-primary">All campgrounds
+    </button></a>
 </body>
-</html>
+
