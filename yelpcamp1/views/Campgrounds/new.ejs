@@ -1,5 +1,5 @@
 <% layout ('/Layout/boilerplate.ejs') %>
-<div class="row">
+<div class="row container">
     <h1 class="text-center">Add New Campground!</h1>
     <div class="col-6 offset-3">
         <form action="/campgrounds" method="post">
@@ -22,7 +22,7 @@
        </div>
        <div class="mb-3">
         <label for="description" class="form-label">Description
-            <textarea  class="form-control" type="text" id="description" name="description"></textarea>
+            <textarea  pd-100 class="form-control" type="text" id="description" name="description"></textarea>
         </label>
         
        </div>
@@ -37,7 +37,7 @@
         <button class="btn btn-primary">submit</button>
         </form>
     
-        <button class="btn btn-primary"><a href="/campgrounds" style="color: aliceblue; text-decoration: none;">All campgrounds</a>
+        <button class="btn btn-primary mb-3"><a href="/campgrounds" style="color: aliceblue; text-decoration: none;">All campgrounds</a>
         </button>
     </div>
 </div>

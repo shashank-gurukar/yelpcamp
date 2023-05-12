@@ -6,7 +6,9 @@ name:String,
 price:Number,
 description:String,
 location:String,
-Image: String
+Image: String,
+reviews:
+    [{type: Schema.Types.ObjectId,ref:"Review"}]
 
 
 });

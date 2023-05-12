@@ -5,6 +5,9 @@ const path = require('path');
 const ejsMate =require('ejs-mate')
 const Campground= require("./model/campground")
 const methodOverride=require("method-override")
+const Review= require("./model/review");
+
+
 mongoose.connect('mongodb://localhost:27017/yelp-camp')
     .then(()=>{
           console.log('database connected');
@@ -63,6 +66,30 @@ app.delete("/campgrounds/:id",async(req,res)=>{
   res.redirect('/campgrounds')
 
 })
+
+// app.post("/campgrounds/:id/reviews",async (req,res)=>{
+// const campground= await Campground.findById(req.params.id)
+// const review = new Review(req.body.review);
+//  campground.reviews.push(review);
+//  console.log(review);
+//  await review.save();
+// await campground.save();
+// res.redirect(`/campgrounds/${campground._id}`);
+// })
+
+app.post("/campgrounds/:id/reviews", async (req, res) => {
+  const campground = await Campground.findById(req.params.id);
+  try {
+    const review = await Review.create(req.body.review);
+    campground.reviews.push(review);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+  } catch (error) {
+    console.error(error); // Log any errors that occur
+    res.redirect("/"); // Redirect to the home page if there is an error
+  }
+});
+
 app.get('/campgrounds/:id/edit', async (req,res)=>{
   const campground = await Campground.findById(req.params.id);
   res.render('Campgrounds/edit',{campground})
