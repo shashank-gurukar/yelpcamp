@@ -67,15 +67,7 @@ app.delete("/campgrounds/:id",async(req,res)=>{
 
 })
 
-// app.post("/campgrounds/:id/reviews",async (req,res)=>{
-// const campground= await Campground.findById(req.params.id)
-// const review = new Review(req.body.review);
-//  campground.reviews.push(review);
-//  console.log(review);
-//  await review.save();
-// await campground.save();
-// res.redirect(`/campgrounds/${campground._id}`);
-// })
+
 
 app.post("/campgrounds/:id/reviews", async (req, res) => {
   const campground = await Campground.findById(req.params.id);
