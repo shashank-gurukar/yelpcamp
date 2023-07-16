@@ -28,7 +28,10 @@ router.get('/:id',async (req,res)=>{
  
   
   const campground = await Campground.findById(req.params.id).populate('reviews');
-  console.log(campground)
+ if(!campground){
+  req.flash('error',"Campground not found");
+  return res.redirect('/campgrounds')
+ }
   res.render('show',{campground })
 })
 
@@ -36,6 +39,7 @@ router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { name, location } = req.body;
   const updatedCampground = await Campground.findByIdAndUpdate(id, { name, location }, { new: true });
+  req.flash('success',"You've successfully updated the campground")
   res.redirect(`/campgrounds/${updatedCampground._id}`);
 });
 
@@ -45,8 +49,9 @@ router.delete("/:id",async(req,res)=>{
   res.redirect('/campgrounds')
 
 })
-router.get('/campgrounds/:id/edit', async (req,res)=>{
+router.get('/:id/edit', async (req,res)=>{
     const campground = await Campground.findById(req.params.id);
+   
     res.render('Campgrounds/edit',{campground})
   })
   
