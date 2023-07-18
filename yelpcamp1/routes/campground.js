@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const {isLoggedIn}= require('../middleware')
 
 const Campground= require("../model/campground")
 
@@ -21,8 +22,9 @@ router.post('/',async (req,res)=>{
     res.redirect('/campgrounds/' + campground._id);
   })
 
-router.get('/new',(req,res)=>{
+router.get('/new',isLoggedIn,(req,res)=>{
   res.render('Campgrounds/new');
+  console.log(isLoggedIn)
 })
 router.get('/:id',async (req,res)=>{
  

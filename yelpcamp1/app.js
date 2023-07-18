@@ -29,17 +29,17 @@ app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname,'public')));
-const sessionConfig={
-  secret:"thisshouldbeabettersecret",
-  resave:false,
-  saveUninitialized:true,
-  cookie:{
-    httpOnly:true,
-    expires:Date.now+1000*60*60*24,
-    maxAge:1000*60*60*24
+const sessionConfig = {
+  secret: "thisshouldbeabettersecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24,
+    maxAge: 1000 * 60 * 60 * 24
   }
-  
-}
+};
+
 
 app.use(session(sessionConfig));
 app.use(flash());
@@ -47,7 +47,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser)
+passport.deserializeUser(User.deserializeUser())
 
 
 app.use((req,res,next)=>{
