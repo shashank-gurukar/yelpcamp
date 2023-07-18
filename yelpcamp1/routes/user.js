@@ -7,22 +7,26 @@ const passport = require("passport");
 router.get('/register',(req,res)=>{
     res.render('users/users')
 }) 
-router.post('/register',async (req,res)=>{
-   try{
-    const {email,username,password} = req.body;
-    
-    const user = User({email,username})
-   const registeredUser= await  User.register(user,password)
-  console.log(registeredUser)
-  req.flash('success','new account')
-  res.redirect('/campgrounds')
-   }
-   catch(e){
-    console.log(e)
-    req.flash('error',e.messaage)
-    res.redirect('register')
-   }
-}) 
+router.post('/register', async (req, res, next) => {
+  try {
+    const { email, username, password } = req.body;
+
+    const user = new User({ email, username }); // Create a new instance of User
+
+    const registeredUser = await User.register(user, password); // Register the user using the register method
+
+    req.login(registeredUser, (err) => {
+      if (err) {
+        return next(err);
+      }
+      req.flash('success','User registered successfully.'); // Send a response indicating successful registration
+      res.redirect('/campgrounds')
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 router.get('/login',(req,res)=>{
     res.render('users/login')
@@ -30,7 +34,11 @@ router.get('/login',(req,res)=>{
 })
 router.post('/login',passport.authenticate('local',{failureFlash:true,failureRedirect:'/login'}),(req,res)=>{
    req.flash('success','welcome back') 
-    res.redirect('/campgrounds')
+   console.log(req.session)
+
+   const redirectUrl = req.session.returnTo || '/campgrounds';
+   delete req.session.returnTo;
+    res.redirect(redirectUrl)
 
 })
 router.get('/logout', (req, res) => {
