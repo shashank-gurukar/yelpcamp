@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router({ mergeParams:true});
 const Review= require("../model/review");
 const Campground= require("../model/campground");
+const { isLoggedIn,isAuthor,risAuthor }= require('../middleware');
 
 
-router.delete("/:reviewId", async (req, res) => {
-    console.log(req.params)
+router.delete("/:reviewId",isAuthor,risAuthor, async (req, res) => {
+    
     const { id, reviewId } = req.params;
     try {
       await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
@@ -21,18 +22,38 @@ router.delete("/:reviewId", async (req, res) => {
   
 
 
-router.post("/", async (req, res) => {
-  const campground = await Campground.findById(req.params.id);
-  console.log(req.params.id)
-  try {
-    const review = await Review.create(req.body.review);
-    campground.reviews.push(review);
-    await campground.save();
-    req.flash('success','Your review was successfully posted')
-    res.redirect(`/campgrounds/${campground._id}`);
-  } catch (error) {
-    console.error(error); // Log any errors that occur
-   // Redirect to the home page if there is an error
-  }
-});
+  router.post('/', isLoggedIn, async (req, res) => {
+    const campgroundId = req.params.id;
+    try {
+      // Find the campground by ID
+      const campground = await Campground.findById(campgroundId);
+      if (!campground) {
+        req.flash('error', 'Campground not found');
+        return res.redirect('/campgrounds');
+      }
+  
+      // Create the review data with the author field set to the logged-in user's ID
+      const reviewData = {
+        ...req.body.review,
+        author: req.user._id,
+      };
+  
+      // Create the review using the modified reviewData
+      const review = await Review.create(reviewData);
+  
+      // Push the newly created review to the campground's reviews array
+      campground.reviews.push(review);
+  
+      // Save the updated campground with the new review
+      await campground.save();
+  
+      req.flash('success', 'Your review was successfully posted');
+      res.redirect(`/campgrounds/${campgroundId}`);
+    } catch (error) {
+      console.error(error);
+      req.flash('error', 'Failed to create review.');
+      res.redirect(`/campgrounds/${campgroundId}`);
+    }
+  });
+  
 module.exports=router;

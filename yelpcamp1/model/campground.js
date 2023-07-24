@@ -8,6 +8,10 @@ price:Number,
 description:String,
 location:String,
 Image: String,
+author:{
+  type:Schema.Types.ObjectId,
+  ref:'User'
+},
 reviews:
     [{type: Schema.Types.ObjectId,ref:"Review"}]
 
