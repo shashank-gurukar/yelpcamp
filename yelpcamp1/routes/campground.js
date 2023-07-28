@@ -4,7 +4,11 @@ const {isLoggedIn,isAuthor}= require('../middleware')
 const campground= require('../controllers/campground')
 const Campground= require("../model/campground")
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const {storage}=require('../cloudinary/index')
+const upload = multer({storage });
+
+
+
 router.get('/',campground.index )
 router.post('/',upload.single('image'),(req,res)=>{
   console.log(req.file,req.body)
