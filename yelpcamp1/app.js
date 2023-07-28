@@ -1,3 +1,7 @@
+ if(process.env.NODE_ENV!='production'){
+  require('dotenv').config();
+ }
+ console.log(process.env.secret)
  const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -24,11 +28,13 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp')
 
 app.use(express.urlencoded({extended:true}))    
 
+
 app.engine('ejs',ejsMate);
 app.set('view engine','ejs');
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('views',path.join(__dirname,'views'));
 app.use(methodOverride('_method'))
-app.use(express.static(path.join(__dirname,'public')));
 const sessionConfig = {
   secret: "thisshouldbeabettersecret",
   resave: false,

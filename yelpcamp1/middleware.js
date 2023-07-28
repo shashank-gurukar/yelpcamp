@@ -20,7 +20,7 @@ module.exports.isAuthor = async (req, res,next) => {
   
       // Assuming currentUser is defined and contains the user's information, including the ID
       if (!campground.author.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission to edit this campground!');
+        req.flash('error', 'You do not have permission to edit this campground!ss ');
         return res.redirect(`/campgrounds/${id}`);
       }
       next();

@@ -2,7 +2,8 @@
 <div class="row container">
     <h1 class="text-center">Add New Campground!</h1>
     <div class="col-6 offset-3">
-        <form action="/campgrounds" method="post">
+        <form action="/campgrounds" method="post" enctype="multipart/form-data">
+
            <div class="mb-3">
             <label for="name" class="form-label">Name
                 <input class="form-control" type="text" id="name" name="name">
@@ -15,10 +16,11 @@
         </label>
        </div>
        <div class="mb-3">
-        <label for="Image" class="form-label">Image Url
-            <input class="form-control" type="text" id="Image" name="Image">
+        <input type="file" name="image" id="image">
+        <!-- <label for="Image" class="form-label">Image Url
+            <input class="form-control" type="file" id="image" name="image">
     
-        </label>
+        </label> -->
        </div>
        <div class="mb-3">
         <label for="description" class="form-label">Description
