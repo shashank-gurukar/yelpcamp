@@ -6,15 +6,26 @@ module.exports.index=async (req,res)=>{
     const campground = await Campground.find({})
     res.render('Campgrounds/index',{campground})
 }
-module.exports.new=async (req,res)=>{
-
-    const campground =  new Campground(req.body);
-    campground.author= req.user._id;
+module.exports.new = async (req, res) => {
+  const imageFiles = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+  const campgroundData = {
+    ...req.body,
+    Image: imageFiles,
+    author: req.user._id,
+  };
+  
+  const campground = new Campground(campgroundData);
+  try {
     await campground.save();
-    req.flash('success',"You've success made a new Campground ")
- 
-     res.redirect('/campgrounds/' + campground._id);
-   }
+    console.log(campground);
+    req.flash('success', "You've successfully created a new Campground.");
+    res.redirect('/campgrounds/' + campground._id);
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Failed to create a new Campground.');
+    res.redirect('/campgrounds'); // Redirect to an appropriate error page or back to the form, as desired
+  }
+};
    module.exports.renderNewForm=(req,res)=>{
     res.render('Campgrounds/new');
   
@@ -36,15 +47,43 @@ module.exports.new=async (req,res)=>{
      res.render('Campgrounds/show',{campground })
    }
 
-   module.exports.updateCampground=async (req, res) => {
+   module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
     const { name, location } = req.body;
-    const campground = await Campground.findById({id}).populate('author')
     
-    const updatedCampground = await Campground.findByIdAndUpdate(id, { name, location }, { new: true });
-    req.flash('success',"You've successfully updated the campground")
-    res.redirect(`/campgrounds/${updatedCampground._id}`);
-  }
+    try {
+      const campground = await Campground.findById(id).populate('author');
+      
+      if (!campground) {
+        req.flash('error', 'Campground not found.');
+        return res.redirect('/campgrounds'); // Redirect to an appropriate page when the campground is not found
+      }
+      
+      // Check if the current user is the author of the campground
+      if (!campground.author.equals(req.user._id)) {
+        req.flash('error', 'You are not authorized to update this campground.');
+        return res.redirect(`/campgrounds/${id}`);
+      }
+      
+      // Handle image upload
+      const imageFiles = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+      campground.Image = imageFiles; // Update the Image property with the new image data
+      
+      // Update the campground data
+      campground.name = name;
+      campground.location = location;
+      
+      // Save the updated campground
+      await campground.save();
+      
+      req.flash('success', "You've successfully updated the campground.");
+      res.redirect(`/campgrounds/${campground._id}`);
+    } catch (err) {
+      console.error(err);
+      req.flash('error', 'Failed to update the campground.');
+      res.redirect(`/campgrounds/${id}`); // Redirect to an appropriate error page or back to the form, as desired
+    }
+  };
   module.exports.deleteCampground=async(req,res)=>{
     const {id} = req.params; 
   

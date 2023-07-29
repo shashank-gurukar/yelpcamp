@@ -21,7 +21,17 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp')
             const rand = Math.floor(Math.random()*1000);
             const price= Math.floor(Math.random()*1000)
         const camp = new Campground({name:`${sample(descriptors) } ${sample(places)}`,location:`${ cities[rand].city } ,${ cities[rand].state }`,
-            Image:'https://source.unsplash.com//collection/483251/1600x900',
+        Image: [
+            {
+              url: 'https://res.cloudinary.com/dzpmxal4n/image/upload/v1690615935/Yelpcamp/j4eyfml9mdkrrlxuoof3.jpg',
+              filename: 'Yelpcamp/j4eyfml9mdkrrlxuoof3'
+            },
+            {
+              url: 'https://res.cloudinary.com/dzpmxal4n/image/upload/v1690615936/Yelpcamp/syctmq2e3ddf3mlrnjej.jpg',
+              filename: 'Yelpcamp/syctmq2e3ddf3mlrnjej'
+             
+            }
+          ],
             description:"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore quibusdam similique est animi facere, blanditiis obcaecati repellat iure! Dolor vitae aut ducimus fugiat, porro iste. Explicabo earum sint blanditiis ut.",
             price:price,
             author: '64b6c59e9399909ca3eb364d'

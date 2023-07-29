@@ -7,7 +7,12 @@ name:String,
 price:Number,
 description:String,
 location:String,
-Image: String,
+Image: [
+  {
+  url:  String,
+  filename:String
+   }
+  ],
 author:{
   type:Schema.Types.ObjectId,
   ref:'User'
