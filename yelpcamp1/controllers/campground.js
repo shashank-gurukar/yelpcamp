@@ -1,5 +1,5 @@
 const Campground= require("../model/campground")
-
+const {cloudinary}=require('../cloudinary/index')
 module.exports.index=async (req,res)=>{
 
     
@@ -17,7 +17,7 @@ module.exports.new = async (req, res) => {
   const campground = new Campground(campgroundData);
   try {
     await campground.save();
-    console.log(campground);
+   
     req.flash('success', "You've successfully created a new Campground.");
     res.redirect('/campgrounds/' + campground._id);
   } catch (err) {
@@ -39,7 +39,7 @@ module.exports.new = async (req, res) => {
        },
      })
      .populate('author');
-     console.log(campground )
+ 
      if(!campground){
      req.flash('error',"Campground not found");
      return res.redirect('/campgrounds')
@@ -49,9 +49,9 @@ module.exports.new = async (req, res) => {
 
    module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
-    const { name, location } = req.body;
+    const { name, location,description,price } = req.body;
     
-    try {
+    try { 
       const campground = await Campground.findById(id).populate('author');
       
       if (!campground) {
@@ -64,18 +64,26 @@ module.exports.new = async (req, res) => {
         req.flash('error', 'You are not authorized to update this campground.');
         return res.redirect(`/campgrounds/${id}`);
       }
-      
+     
       // Handle image upload
       const imageFiles = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-      campground.Image = imageFiles; // Update the Image property with the new image data
+      campground.Image.push(...imageFiles); // Update the Image property with the new image data
       
       // Update the campground data
       campground.name = name;
       campground.location = location;
+      campground.description=description;
+      campground.price=price;  
       
       // Save the updated campground
       await campground.save();
-      
+      if(req.body.deleteImages){
+       for(let filename of req.body.deleteImages){
+       await cloudinary.uploader.destroy(filename)
+       }
+        await campground.updateOne({$pull:{Image:{filename:{$in:req.body.deleteImages}}}})
+         
+      } 
       req.flash('success', "You've successfully updated the campground.");
       res.redirect(`/campgrounds/${campground._id}`);
     } catch (err) {
