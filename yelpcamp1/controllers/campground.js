@@ -1,5 +1,9 @@
 const Campground= require("../model/campground")
 const {cloudinary}=require('../cloudinary/index')
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding')
+
+const mapBoxToken=process.env.MAPBOX_TOKEN
+const geoCoder=mbxGeocoding({accessToken:mapBoxToken})
 module.exports.index=async (req,res)=>{
 
     
@@ -7,24 +11,31 @@ module.exports.index=async (req,res)=>{
     res.render('Campgrounds/index',{campground})
 }
 module.exports.new = async (req, res) => {
-  const imageFiles = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-  const campgroundData = {
-    ...req.body,
-    Image: imageFiles,
-    author: req.user._id,
-  };
+  const geoData=await geoCoder.forwardGeocode({
+    query:req.body.location,
+    limit:1
+
+  }).send();
+  console.log(geoData.body.features)
+  res.send('ok')
+//   const imageFiles = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+//   const campgroundData = {
+//     ...req.body,
+//     Image: imageFiles,
+//     author: req.user._id,
+//   };
   
-  const campground = new Campground(campgroundData);
-  try {
-    await campground.save();
+//   const campground = new Campground(campgroundData);
+//   try {
+//     await campground.save();
    
-    req.flash('success', "You've successfully created a new Campground.");
-    res.redirect('/campgrounds/' + campground._id);
-  } catch (err) {
-    console.error(err);
-    req.flash('error', 'Failed to create a new Campground.');
-    res.redirect('/campgrounds'); // Redirect to an appropriate error page or back to the form, as desired
-  }
+//     req.flash('success', "You've successfully created a new Campground.");
+//     res.redirect('/campgrounds/' + campground._id);
+//   } catch (err) {
+//     console.error(err);
+//     req.flash('error', 'Failed to create a new Campground.');
+//     res.redirect('/campgrounds'); // Redirect to an appropriate error page or back to the form, as desired
+//   }
 };
    module.exports.renderNewForm=(req,res)=>{
     res.render('Campgrounds/new');
@@ -91,7 +102,7 @@ module.exports.new = async (req, res) => {
       req.flash('error', 'Failed to update the campground.');
       res.redirect(`/campgrounds/${id}`); // Redirect to an appropriate error page or back to the form, as desired
     }
-  };
+   };
   module.exports.deleteCampground=async(req,res)=>{
     const {id} = req.params; 
   
