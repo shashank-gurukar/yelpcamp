@@ -71,6 +71,7 @@ app.use('/campgrounds',campgrounds );
 app.use('/campgrounds/:id/reviews',reviews)
 
 
+
 try {
     app.listen(3000, () => {
       console.log('serving on 3000')

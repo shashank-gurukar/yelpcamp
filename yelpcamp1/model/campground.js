@@ -16,15 +16,16 @@ price:Number,
 description:String,
 location:String,
 geometry:{
+  coordinates: {
+    type: [Number], // Array of arrays of arrays of numbers
+    required: true
+  },
 type: {
   type: String,
   enum: ['Point'],
   required: true
-},
-coordinates: {
-  type: [[[Number]]], // Array of arrays of arrays of numbers
-  required: true
 }
+
 },
 Image: [imageSchema],
 author:{
