@@ -15,6 +15,17 @@ name:String,
 price:Number,
 description:String,
 location:String,
+geometry:{
+type: {
+  type: String,
+  enum: ['Point'],
+  required: true
+},
+coordinates: {
+  type: [[[Number]]], // Array of arrays of arrays of numbers
+  required: true
+}
+},
 Image: [imageSchema],
 author:{
   type:Schema.Types.ObjectId,

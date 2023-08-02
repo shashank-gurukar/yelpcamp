@@ -16,26 +16,27 @@ module.exports.new = async (req, res) => {
     limit:1
 
   }).send();
-  console.log(geoData.body.features)
-  res.send('ok')
-//   const imageFiles = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-//   const campgroundData = {
-//     ...req.body,
-//     Image: imageFiles,
-//     author: req.user._id,
-//   };
+   req.body.geometry=geoData.body.features[0].geometry
+ 
+  const imageFiles = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+  const campgroundData = {
+    ...req.body,
+    Image: imageFiles,
+    author: req.user._id,
+  };
+  console.log(campgroundData)
   
-//   const campground = new Campground(campgroundData);
-//   try {
-//     await campground.save();
+  const campground = new Campground(campgroundData);
+  try {
+    await campground.save();
    
-//     req.flash('success', "You've successfully created a new Campground.");
-//     res.redirect('/campgrounds/' + campground._id);
-//   } catch (err) {
-//     console.error(err);
-//     req.flash('error', 'Failed to create a new Campground.');
-//     res.redirect('/campgrounds'); // Redirect to an appropriate error page or back to the form, as desired
-//   }
+    req.flash('success', "You've successfully created a new Campground.");
+    res.redirect('/campgrounds/' + campground._id);
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Failed to create a new Campground.');
+    res.redirect('/campgrounds'); // Redirect to an appropriate error page or back to the form, as desired
+  }
 };
    module.exports.renderNewForm=(req,res)=>{
     res.render('Campgrounds/new');
