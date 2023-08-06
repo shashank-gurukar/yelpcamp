@@ -77,11 +77,9 @@ module.exports.new = async (req, res) => {
         return res.redirect(`/campgrounds/${id}`);
       }
      
-      // Handle image upload
+     
       const imageFiles = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-      campground.Image.push(...imageFiles); // Update the Image property with the new image data
-      
-      // Update the campground data
+      campground.Image.push(...imageFiles);
       campground.name = name;
       campground.location = location;
       campground.description=description;
