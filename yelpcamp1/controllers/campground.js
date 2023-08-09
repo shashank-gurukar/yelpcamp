@@ -4,6 +4,9 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding')
 
 const mapBoxToken=process.env.MAPBOX_TOKEN
 const geoCoder=mbxGeocoding({accessToken:mapBoxToken})
+module.exports.home= (req,res)=>{
+  res.render('Campgrounds/home')
+}
 module.exports.index=async (req,res)=>{
 
     

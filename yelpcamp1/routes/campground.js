@@ -8,7 +8,7 @@ const {storage}=require('../cloudinary/index')
 const upload = multer({storage });
 
 
-
+router.get('/home',campground.home)
 router.get('/',campground.index )
 router.post('/',upload.array('image'),campground.new)
 router.get('/new',isLoggedIn,campground.renderNewForm)
