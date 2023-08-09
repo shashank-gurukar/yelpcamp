@@ -1,7 +1,7 @@
  if(process.env.NODE_ENV!='production'){
   require('dotenv').config();
  }
- 
+ const mongoSanitize = require('express-mongo-sanitize');
  const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -46,7 +46,7 @@ const sessionConfig = {
   }
 };
 
-
+app.use(mongoSanitize());
 app.use(session(sessionConfig));
 app.use(flash());
 app.use(passport.initialize())
@@ -54,10 +54,10 @@ app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
-
+ 
 
 app.use((req,res,next)=>{
-  console.log(req.session)
+  
   res.locals.currentUser=req.user;
   res.locals.success=req.flash('success');
   res.locals.error=req.flash('error');

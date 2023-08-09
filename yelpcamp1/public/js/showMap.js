@@ -10,7 +10,7 @@ const coordinates = campground.geometry.coordinates;
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhc2hhbmstZ3VydWthciIsImEiOiJjbGtwcXI4ZjgybTIxM2prZ3dpNmQ4dWtqIn0.oDl1b4ApWzfljGg8dXSOBQ';
 const map = new mapboxgl.Map({
-  container: 'map',
+  container: 'cluster-map',
   style: 'mapbox://styles/mapbox/streets-v12',
   center: coordinates,
   zoom: 9
